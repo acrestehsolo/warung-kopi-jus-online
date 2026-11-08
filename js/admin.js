@@ -34,8 +34,19 @@ function statusBadge(status) {
 async function init() {
   try {
     await Store.init();
-    state.settings = await Store.get("settings", DEFAULT_SETTINGS);
-    state.menu = await Store.get("menu", DEFAULT_MENU);
+    let settings = await Store.get("settings", DEFAULT_SETTINGS);
+    let menu = await Store.get("menu", DEFAULT_MENU);
+    // Fix: Store.get() bisa return null (bukan fallback) jika Gist punya settings: null
+    if (!settings || typeof settings !== "object" || !settings.adminPassword) {
+      console.warn("Settings invalid/null, pakai DEFAULT_SETTINGS");
+      settings = DEFAULT_SETTINGS;
+    }
+    if (!menu || !Array.isArray(menu) || menu.length === 0) {
+      console.warn("Menu kosong, pakai DEFAULT_MENU");
+      menu = DEFAULT_MENU;
+    }
+    state.settings = settings;
+    state.menu = menu;
     state.orders = await Store.getOrders();
   } catch (err) {
     console.error("Admin init error:", err);

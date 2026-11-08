@@ -19,9 +19,9 @@
 
 // >>> GANTI DENGAN DATA KAMU <<<
 // GIST_ID: dari URL gist.github.com/xxx/xxxxxxxxxxxxxxxxx
-const GIST_ID = "0c7b1bea37d66c42014819340666203f/4be4e9207dec9ee156a74af7b2cf1eb2f9ad2801";
+const GIST_ID = "YOUR_GIST_ID";
 // GIST_TOKEN: GitHub Personal Access Token (scope: gist)
-const GIST_TOKEN = "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";
+const GIST_TOKEN = "YOUR_GIST_TOKEN";
 
 const GIST_API = "https://api.github.com/gists";
 
@@ -50,10 +50,11 @@ const Store = {
       }
     } catch {}
     if (!this.data) this.data = {};
-    // Seed data jika kosong
+    // Seed data jika kosong — jangan set null karena get() mengembalikan null (bukan fallback)
     if (!this.data.orders) this.data.orders = [];
-    if (!this.data.settings) this.data.settings = null;
-    if (!this.data.menu) this.data.menu = null;
+    // settings & menu: biarkan undefined agar Store.get() kembalikan fallback
+    if (this.data.settings === null) delete this.data.settings;
+    if (this.data.menu === null) delete this.data.menu;
   },
 
   // --- Simpan data.json ke Gist ---
