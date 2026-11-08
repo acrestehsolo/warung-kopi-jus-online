@@ -19,9 +19,9 @@
 
 // >>> GANTI DENGAN DATA KAMU <<<
 // GIST_ID: dari URL gist.github.com/xxx/xxxxxxxxxxxxxxxxx
-const GIST_ID = "YOUR_GIST_ID";
+const GIST_ID = "0c7b1bea37d66c42014819340666203f";
 // GIST_TOKEN: GitHub Personal Access Token (scope: gist)
-const GIST_TOKEN = "YOUR_GIST_TOKEN";
+const GIST_TOKEN = "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";
 
 const GIST_API = "https://api.github.com/gists";
 
