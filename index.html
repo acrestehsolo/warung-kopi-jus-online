@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Warung Kopi Mas Wahyu Banyuany — Online</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>" />
+</head>
+<body>
+  <!-- ===== Header ===== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-logo" id="brandLogo">☕🍹</span>
+        <div>
+          <h1 id="shopName" class="brand-name">Warung Kopi Mas Wahyu Banyuany</h1>
+          <p id="shopAddress" class="brand-address">📍 Jl. Bone Barat Utama No 12, Banyuany</p>
+        </div>
+        <a id="headerWaBubble" class="header-wa-bubble" href="#" aria-label="Chat WhatsApp" hidden>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.74.5 3.39 1.41 4.83L2 22l5.35-1.36A10 10 0 1 0 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><path d="M8.5 14.5c-.3 0-.5-.1-.7-.3-.2-.2-.5-.2-.7-.2-.3 0-.5-.1-.7-.3-1.4-1.4-1.4-3.6 0-5 1.4-1.4 3.6-1.4 5 0 .3.3.3.7.3 1 .05.08.08.16.13.24-.3.9-.9 1.7-1.8 2.3-.5.3-1 .5-1.6.5z"/></svg>
+        </a>
+      </div>
+      <button id="checkStatusBtn" class="cart-btn cart-btn-ghost" aria-label="Cek Pesanan">📦 Cek Pesanan</button>
+      <button id="cartBtn" class="cart-btn" aria-label="Keranjang">
+        🛒 <span class="cart-badge" id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== Hero Banner (Professional & Exclusive) ===== -->
+  <section class="hero-banner">
+    <div class="hero-bg" aria-hidden="true">
+      <img src="assets/meja-bar-vintage.jpg" alt="Ruang Resto" class="hero-bg-img" onerror="this.style.display='none'" />
+      <div class="hero-bg-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">☕🍹 SELALU SEGAR · SELALU SIAP</div>
+      <h1 class="hero-title" id="heroTitle">Warung Kopi Mas Wahyu Banyuany</h1>
+      <p class="hero-subtitle">Pesan online, diantar ke rumah Anda.<br/>Area pengantaran: <strong>5 km &amp; 10 km</strong></p>
+      <div class="hero-couriers">
+        <span class="courier-chip courier-gofood">🟢 GoFood</span>
+        <span class="courier-chip courier-grabfood">🟢 GrabFood</span>
+        <span class="courier-chip courier-shopeefood">🟠 ShopeeFood</span>
+        <span class="courier-chip courier-maxim">🟡 Maxim</span>
+        <span class="courier-chip courier-kurirresto">💜 Kurir Resto</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Filter kategori ===== -->
+  <nav class="category-bar" id="categoryBar">
+    <!-- diisi JS -->
+  </nav>
+
+  <!-- ===== Menu ===== -->
+  <main class="menu-grid" id="menuGrid">
+    <!-- diisi JS -->
+  </main>
+
+  <p class="empty-hint" id="emptyHint" hidden>Category ini kosong.</p>
+
+  <!-- ===== Keranjang (sidebar) ===== -->
+  <div class="overlay" id="overlay" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Keranjang">
+    <div class="cart-head">
+      <h3>🛒 Keranjang</h3>
+      <button class="close-btn" id="closeCart" aria-label="Tutup">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <!-- diisi JS -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total</span>
+        <strong id="cartTotal">Rp 0</strong>
+      </div>
+      <button class="btn-checkout" id="checkoutBtn" disabled>Lanjut Pesan</button>
+    </div>
+  </aside>
+
+  <!-- ===== Checkout ===== -->
+  <div class="modal" id="checkoutModal" hidden>
+    <div class="modal-content checkout-content">
+      <div class="modal-head">
+        <h3>📍 Konfirmasi Pesanan</h3>
+        <button class="close-btn" id="closeCheckout" aria-label="Tutup">✕</button>
+      </div>
+
+      <form id="checkoutForm" class="checkout-form">
+        <div class="field-row">
+          <label>Nama Pembeli <span class="req">*</span></label>
+          <input type="text" id="custName" required placeholder="Contoh: Budi" />
+        </div>
+        <div class="field-row">
+          <label>No. HP Pembeli <span class="req">*</span></label>
+          <input type="tel" id="custPhone" required placeholder="08xxxxxxxxxx" />
+        </div>
+        <div class="field-row">
+          <label>Alamat Pengantaran <span class="req">*</span></label>
+          <textarea id="custAddress" rows="2" required placeholder="Jalan, nomor rumah, detail…"></textarea>
+        </div>
+
+        <div class="field-row">
+          <label>Jarak Pengantaran (km) <span class="req">*</span></label>
+          <input type="number" id="custDistance" min="0.5" max="10" step="0.5" value="5" required />
+          <small class="hint">Area: <strong>5 km</strong> dan <strong>10 km</strong>. Maks <strong id="maxKmLabel">10 km</strong>.</small>
+        </div>
+
+        <label class="section-label">Kurir Penyampai</label>
+        <div class="courier-grid" id="courierGrid">
+          <!-- diisi JS -->
+        </div>
+
+        <label class="section-label">Metode Pembayaran</label>
+        <div class="pay-grid" id="payGrid">
+          <!-- diisi JS -->
+        </div>
+
+        <div class="payment-details" id="paymentDetails"></div>
+
+        <div id="courierOrderBtns"></div>
+
+        <label class="section-label">Catatan (opsional)</label>
+        <textarea id="custNote" rows="2" placeholder="Misal: tidak pakai gula, tolong cepat…"></textarea>
+
+        <div class="summary-box">
+          <div class="summary-line"><span>Subtotal</span><span id="sumSubtotal">Rp 0</span></div>
+          <div class="summary-line"><span>Ongkir (<span id="sumCourierName">-</span>)</span><span id="sumShipping">Rp 0</span></div>
+          <div class="summary-line summary-total"><span>Total Bayar</span><span id="sumTotal">Rp 0</span></div>
+        </div>
+
+        <div class="courier-warn" id="courierWarn" hidden></div>
+
+        <button type="submit" class="btn-submit" id="submitOrder">✅ Pesan Sekarang</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== Pembayaran (pilih metode sebelum order) ===== -->
+  <div class="modal" id="payModal" hidden>
+    <div class="modal-content pay-content">
+      <div class="modal-head">
+        <h3>💳 Pilih Metode Pembayaran</h3>
+        <button class="close-btn" id="closePay" aria-label="Tutup">✕</button>
+      </div>
+      <div class="pay-modal-summary" id="payModalSummary"></div>
+      <div class="pay-grid-modal" id="payGridModal"></div>
+      <div class="pay-instructions" id="payInstructions" hidden></div>
+      <div class="pay-actions">
+        <button class="btn-ghost" id="payCancel">Kembali</button>
+        <button class="btn-submit" id="payConfirm" disabled>✅ Bayar & Lanjutkan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Konfirmasi pesanan ===== -->
+  <div class="modal" id="confirmModal" hidden>
+    <div class="modal-content confirm-content">
+      <div class="confirm-icon">🎉</div>
+      <h3>Pesanan Berhasil Dikirim!</h3>
+      <p class="confirm-shop" id="confirmShopName"></p>
+      <p class="confirm-thanks" id="confirmThanks"></p>
+      <div class="confirm-detail" id="confirmDetail"></div>
+      <button class="btn-submit" id="confirmClose">Oke, Siap!</button>
+    </div>
+  </div>
+
+  <!-- ===== Tracking Pesanan ===== -->
+  <div class="modal" id="trackModal" hidden>
+    <div class="modal-content track-content">
+      <div class="modal-head">
+        <h3>📦 Cek Status Pesanan</h3>
+        <button class="close-btn" id="closeTrack" aria-label="Tutup">✕</button>
+      </div>
+      <div class="checkout-form">
+        <div class="field-row">
+          <label>No. Pesanan atau Nama</label>
+          <input type="text" id="trackInput" placeholder="Contoh: ID-A1B2C3 atau Budi" />
+          <small class="hint">Cari berdasarkan No. Pesanan atau Nama Pembeli</small>
+        </div>
+        <button class="btn-checkout" id="trackSearchBtn">🔍 Cari Pesanan</button>
+        <div id="trackResults" style="margin-top:14px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <p>© <span id="year"></span> <span id="footerShop"></span> — Warung Kopi Mas Wahyu Banyuany</p>
+    <p>Powered by Bolang · <a href="admin.html">Admin Panel</a></p>
+  </footer>
+
+  <!-- ===== Floating Cart Button ===== -->
+  <button id="floatCartBtn" class="float-cart-btn" aria-label="Pesan sekarang">
+    <span class="float-cart-bubble"></span>
+    <span class="float-cart-icon">🛒</span>
+    <span class="float-cart-text">Pesan sekarang</span>
+    <span class="float-cart-badge" id="floatCartBadge" hidden>0</span>
+  </button>
+
+  <!-- ===== Pop-up Pesanan Aktif ===== -->
+  <div id="orderPopup" class="order-popup" hidden>
+    <div class="order-popup-head">
+      <span class="order-popup-badge" id="orderPopupStatus">🟡 Menunggu</span>
+      <button class="order-popup-close" id="orderPopupClose" aria-label="Tutup">✕</button>
+    </div>
+    <div class="order-popup-body" id="orderPopupBody"></div>
+    <div class="order-popup-foot">
+      <span id="orderPopupTime"></span>
+      <button class="order-popup-detail" id="orderPopupDetail">📦 Detail</button>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

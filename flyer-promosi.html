@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flyer Promosi — Warung Kopi Mas Wahyu Banyuany</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: linear-gradient(135deg, #a7f3d0 0%, #d1fae5 50%, #6ee7b7 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    padding: 20px;
+  }
+
+  .flyer {
+    width: 400px;
+    background: #fff;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  }
+
+  /* ===== Top Banner ===== */
+  .flyer-banner {
+    background: linear-gradient(135deg, #0d4f33 0%, #065f46 50%, #064e3b 100%);
+    padding: 30px 25px 25px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .flyer-banner::before {
+    content: '☕';
+    position: absolute;
+    top: -20px; right: -10px;
+    font-size: 120px;
+    opacity: 0.08;
+    transform: rotate(-15deg);
+  }
+
+  .flyer-banner::after {
+    content: '🍹';
+    position: absolute;
+    bottom: -20px; left: -10px;
+    font-size: 100px;
+    opacity: 0.08;
+    transform: rotate(15deg);
+  }
+
+  .flyer-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    color: #fef3c7;
+    padding: 4px 16px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    backdrop-filter: blur(6px);
+  }
+
+  .flyer-title {
+    color: #fff;
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 5px;
+  }
+
+  .flyer-subtitle {
+    color: rgba(255,255,255,0.8);
+    font-size: 13px;
+    margin-bottom: 15px;
+  }
+
+  .flyer-couriers {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+
+  .flyer-courier-chip {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    backdrop-filter: blur(6px);
+  }
+
+  /* ===== QR Section ===== */
+  .flyer-qr-section {
+    background: linear-gradient(180deg, #f0fdfa 0%, #fff 100%);
+    padding: 25px 20px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .flyer-qr-label {
+    color: #0d4f33;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .flyer-qr-hint {
+    color: #6b7280;
+    font-size: 11px;
+    margin-bottom: 15px;
+  }
+
+  .flyer-qr-box {
+    display: inline-block;
+    background: #fff;
+    padding: 15px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 2px solid #10b981;
+  }
+
+  .flyer-qr-box img {
+    width: 160px;
+    height: 160px;
+    display: block;
+  }
+
+  /* ===== Menu Section ===== */
+  .flyer-menu {
+    padding: 20px;
+  }
+
+  .flyer-menu-title {
+    color: #0d4f33;
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .flyer-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px dashed #e5e7eb;
+  }
+
+  .flyer-menu-item:last-child {
+    border-bottom: none;
+  }
+
+  .flyer-menu-emoji {
+    font-size: 20px;
+    width: 28px;
+    text-align: center;
+  }
+
+  .flyer-menu-name {
+    font-size: 13px;
+    color: #1f2937;
+    font-weight: 600;
+    flex: 1;
+  }
+
+  .flyer-menu-price {
+    font-size: 13px;
+    color: #0d4f33;
+    font-weight: 800;
+  }
+
+  /* ===== Feature Section ===== */
+  .flyer-features {
+    padding: 15px 20px;
+    background: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .flyer-feature {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #374151;
+    padding: 3px 0;
+  }
+
+  .flyer-feature-icon {
+    font-size: 14px;
+    width: 20px;
+    text-align: center;
+  }
+
+  /* ===== Bottom Section ===== */
+  .flyer-bottom {
+    background: linear-gradient(135deg, #0d4f33 0%, #065f46 100%);
+    padding: 18px 20px;
+    text-align: center;
+  }
+
+  .flyer-bottom-title {
+    color: #fef3c7;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .flyer-bottom-info {
+    color: rgba(255,255,255,0.85);
+    font-size: 11px;
+    line-height: 1.6;
+  }
+
+  .flyer-bottom-wa {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #25D366;
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 8px;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+
+  .flyer-bottom-wa:hover {
+    background: #1ebe5d;
+  }
+
+  .flyer-powered {
+    color: rgba(255,255,255,0.4);
+    font-size: 9px;
+    margin-top: 10px;
+  }
+
+  /* ===== Print ===== */
+  @media print {
+    body {
+      background: #fff;
+      padding: 0;
+      display: block;
+    }
+    .flyer {
+      box-shadow: none;
+      margin: 0 auto;
+      width: 400px;
+    }
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 420px) {
+    .flyer {
+      width: 100%;
+      border-radius: 16px;
+    }
+    .flyer-title {
+      font-size: 22px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="flyer">
+
+  <!-- ===== Banner ===== -->
+  <div class="flyer-banner">
+    <div class="flyer-badge">☕🍹 SELALU SEGAR · SELALU SIAP</div>
+    <div class="flyer-title">WARUNG KOPI<br>MAS WAHYU<br>BANYUANY</div>
+    <div class="flyer-subtitle">Kopi, Jus & Detoks Segar · Pesan online · Diantar ke rumah</div>
+    <div class="flyer-couriers">
+      <span class="flyer-courier-chip">🟢 GoFood</span>
+      <span class="flyer-courier-chip">🟢 GrabFood</span>
+      <span class="flyer-courier-chip">🟠 ShopeeFood</span>
+      <span class="flyer-courier-chip">🟡 Maxim</span>
+      <span class="flyer-courier-chip">💜 Kurir Resto</span>
+    </div>
+  </div>
+
+  <!-- ===== QR Code ===== -->
+  <div class="flyer-qr-section">
+    <div class="flyer-qr-label">📱 SCAN QR → LANGSUNG BELANJA</div>
+    <div class="flyer-qr-hint">Buka menu resto & pesan online</div>
+    <div class="flyer-qr-box">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://acrestehsolo.github.io/warung-kopi-jus-online&color=0d4f33&bgcolor=ffffff&errorlevel=H" alt="Scan QR untuk belanja">
+    </div>
+  </div>
+
+  <!-- ===== Menu ===== -->
+  <div class="flyer-menu">
+    <div class="flyer-menu-title">☕ Menu Terpopuler</div>
+
+    <div class="flyer-menu-item">
+      <span class="flyer-menu-emoji">☕</span>
+      <span class="flyer-menu-name">Kopi Susu Gula Aren</span>
+      <span class="flyer-menu-price">Rp 12.000</span>
+    </div>
+    <div class="flyer-menu-item">
+      <span class="flyer-menu-emoji">🥑</span>
+      <span class="flyer-menu-name">Jus Alpukat Susu</span>
+      <span class="flyer-menu-price">Rp 14.000</span>
+    </div>
+    <div class="flyer-menu-item">
+      <span class="flyer-menu-emoji">🍍</span>
+      <span class="flyer-menu-name">Jus Nanas Segar</span>
+      <span class="flyer-menu-price">Rp 12.000</span>
+    </div>
+    <div class="flyer-menu-item">
+      <span class="flyer-menu-emoji">🌿</span>
+      <span class="flyer-menu-name">Detoks Hijau</span>
+      <span class="flyer-menu-price">Rp 15.000</span>
+    </div>
+    <div class="flyer-menu-item">
+      <span class="flyer-menu-emoji">🍞</span>
+      <span class="flyer-menu-name">Roti Bakar Cokelat</span>
+      <span class="flyer-menu-price">Rp 9.000</span>
+    </div>
+    <div class="flyer-menu-item">
+      <span class="flyer-menu-emoji">🍟</span>
+      <span class="flyer-menu-name">French Fries</span>
+      <span class="flyer-menu-price">Rp 8.000</span>
+    </div>
+  </div>
+
+  <!-- ===== Features ===== -->
+  <div class="flyer-features">
+    <div class="flyer-feature">
+      <span class="flyer-feature-icon">🚚</span>
+      <span>Area pengantaran: 5 km & 10 km</span>
+    </div>
+    <div class="flyer-feature">
+      <span class="flyer-feature-icon">💳</span>
+      <span>Tunai · QRIS · Transfer Bank · GoPay</span>
+    </div>
+    <div class="flyer-feature">
+      <span class="flyer-feature-icon">⚡</span>
+      <span>Pesan online · Diantar cepat</span>
+    </div>
+    <div class="flyer-feature">
+      <span class="flyer-feature-icon">📦</span>
+      <span>Tracking pesanan realtime</span>
+    </div>
+  </div>
+
+  <!-- ===== Bottom ===== -->
+  <div class="flyer-bottom">
+    <div class="flyer-bottom-title">📍 Cek lokasi resto & pesan online</div>
+    <div class="flyer-bottom-info">
+      Jl. Bone Barat Utama No 12<br>
+      Banyuany
+    </div>
+    <a class="flyer-bottom-wa" href="https://wa.me/6281234567890" target="_blank">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.74.5 3.39 1.41 4.83L2 22l5.35-1.36A10 10 0 1 0 12 2z"/></svg>
+      Chat WhatsApp
+    </a>
+    <div class="flyer-powered">Powered by Bolang · Warung Kopi Mas Wahyu Banyuany</div>
+  </div>
+
+</div>
+
+</body>
+</html>

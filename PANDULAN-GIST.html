@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panduan GitHub Gist — Warung Kopi Mas Wahyu</title>
+<style>
+  :root {
+    --teal: #0d9488; --teal-dark: #0f766e; --green: #16a34a; --green-light: #dcfce7;
+    --bg: #f0fdfa; --card: #ffffff; --border: #ccfbf1; --orange: #ea580c; --orange-light: #ffedd5;
+    --blue: #2563eb; --blue-light: #dbeafe; --red: #dc2626; --red-light: #fee2e2;
+    --gray: #6b7280; --text: #1f2937;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(135deg, var(--bg) 0%, #ecfdf5 100%); color: var(--text); line-height: 1.7; padding: 20px; }
+  .wrap { max-width: 750px; margin: 0 auto; }
+  .header { text-align: center; background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%); color: white; padding: 30px 20px; border-radius: 16px; margin-bottom: 30px; }
+  .header h1 { font-size: 26px; margin-bottom: 8px; }
+  .header p { font-size: 14px; opacity: 0.9; }
+  .step { background: var(--card); border-radius: 14px; padding: 24px; margin-bottom: 16px; border: 1px solid var(--border); }
+  .step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .step-num { width: 36px; height: 36px; border-radius: 10px; background: var(--teal); color: white; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; flex-shrink: 0; }
+  .step-title { font-size: 17px; font-weight: 700; color: var(--teal-dark); }
+  .click-box { background: var(--blue-light); border-left: 4px solid var(--blue); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 14px; }
+  .click-box strong { color: var(--blue); }
+  .type-box { background: var(--orange-light); border-left: 4px solid var(--orange); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 14px; }
+  .type-box strong { color: var(--orange); }
+  .success-box { background: var(--green-light); border-left: 4px solid var(--green); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 14px; }
+  .success-box strong { color: var(--green); }
+  pre { background: #1e293b; color: #e2e8f0; padding: 12px 14px; border-radius: 8px; font-size: 13px; font-family: monospace; overflow-x: auto; margin: 10px 0; line-height: 1.6; }
+  .url { background: var(--green-light); color: var(--green); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: 600; }
+  ul { padding-left: 20px; margin: 8px 0; } li { margin: 5px 0; }
+  .footer { text-align: center; color: var(--gray); font-size: 13px; margin-top: 25px; padding: 15px; }
+  .footer strong { color: var(--teal-dark); }
+  .badge { display: inline-block; background: var(--green-light); color: var(--green); padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div style="font-size:32px">📋</div>
+    <h1>Panduan GitHub Gist</h1>
+    <p>Cara paling mudah — tidak ada build, tidak ada server, jalan di GitHub Pages</p>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">⭐</div><div class="step-title">Kenapa GitHub Gist?</div></div>
+    <ul>
+      <li><strong>Tidak ada build</strong> — tidak ada "build failed" error</li>
+      <li><strong>Tidak ada server</strong> — tidak perlu Deno Deploy, Railway, dll</li>
+      <li><strong>Gratis</strong> — 100% pakai GitHub yang sudah kamu pakai</li>
+      <li><strong>Jalan di GitHub Pages</strong> — tidak perlu deploy ke tempat lain</li>
+      <li><strong>Order sync</strong> — customer order → admin lihat, dari device berbeda</li>
+    </ul>
+    <div class="success-box"><strong>✅ Total waktu: 10 menit</strong> (3 langkah mudah)</div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">1</div><div class="step-title">Buat Gist di GitHub</div></div>
+    <div class="click-box"><strong>Buka:</strong> <span class="url">https://gist.github.com</span></div>
+    <div class="click-box"><strong>Klik:</strong> tombol <strong>"Create new gist"</strong> (hijau, di tengah)</div>
+    <div class="type-box">
+      <strong>Isi form:</strong>
+      <ul>
+        <li><strong>Description:</strong> <code>Warung Kopi Orders</code></li>
+        <li><strong>Filename:</strong> <code>data.json</code> <span style="color:var(--gray)">(tekan Enter setelah ketik)</span></li>
+        <li><strong>Content:</strong> <code>{}</code> <span style="color:var(--gray)">(kurung kubik kosong)</span></li>
+      </ul>
+    </div>
+    <div class="click-box"><strong>Klik:</strong> tombol <strong>"Create public gist"</strong> (hijau)</div>
+    <div class="type-box">
+      <strong>Salin GIST_ID:</strong> dari URL di address bar<br>
+      URL akan seperti: <span class="url">https://gist.github.com/acrestehsolo/abc123def456...</span><br>
+      GIST_ID = <code>abc123def456...</code> (bagian setelah nama user)
+    </div>
+    <div class="success-box"><strong>✅ Gist dibuat!</strong> Salin GIST_ID untuk Step 3.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">2</div><div class="step-title">Buat GitHub Token</div></div>
+    <p>Token izinkan aplikasi kamu menulis data ke Gist.</p>
+    <div class="click-box"><strong>Buka:</strong> <span class="url">https://github.com/settings/tokens</span></div>
+    <div class="click-box"><strong>Klik:</strong> tombol <strong>"Generate new token"</strong> → <strong>"New token (classic)"</strong></div>
+    <div class="type-box">
+      <strong>Isi form:</strong>
+      <ul>
+        <li><strong>Note:</strong> <code>Warung Kopi Gist</code></li>
+        <li><strong>Expiration:</strong> <code>No expiration</code></li>
+        <li><strong>Scopes:</strong> centang hanya <code>☑ gist</code> (yang lain jangan)</li>
+      </ul>
+    </div>
+    <div class="click-box"><strong>Klik:</strong> tombol <strong>"Generate token"</strong> (hijau di bawah)</div>
+    <div class="type-box">
+      <strong>Salin GIST_TOKEN:</strong> muncul satu kali, seperti <code>ghp_xxxxxxxxxxxxxxxxxxxx</code><br>
+      <span style="color:var(--red)">⚠️ Jangan lupa — ini hanya ditampilkan sekali!</span>
+    </div>
+    <div class="success-box"><strong>✅ Token dibuat!</strong> Salin GIST_TOKEN untuk Step 3.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">3</div><div class="step-title">Pasang ke store.js & Push</div></div>
+    <div class="click-box"><strong>Cara:</strong> GitHub → repo → klik <code>js/store.js</code> → edit (icon pensil)</div>
+    <p>Cari baris ini (dekat awal file):</p>
+    <pre><span class="comment">// >>> GANTI DENGAN DATA KAMU <<<</span>
+<span class="keyword">const</span> GIST_ID = <span class="string">"YOUR_GIST_ID"</span>;
+<span class="keyword">const</span> GIST_TOKEN = <span class="string">"YOUR_GIST_TOKEN"</span>;</pre>
+    <p>Ganti menjadi:</p>
+    <pre><span class="keyword">const</span> GIST_ID = <span class="string">"abc123def456..."</span>;        <span class="comment">// dari Step 1</span>
+<span class="keyword">const</span> GIST_TOKEN = <span class="string">"ghp_xxxxxxxxxxx..."</span>;     <span class="comment">// dari Step 2</span></pre>
+    <div class="click-box"><strong>Klik:</strong> <strong>Commit changes</strong> → <strong>Push</strong></div>
+    <div class="success-box"><strong>✅ Selesai!</strong> Order dari customer sekarang sync ke admin.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-header"><div class="step-num">🔍</div><div class="step-title">Verifikasi</div></div>
+    <h4 style="color:var(--teal-dark);margin:12px 0 6px">1. Test order dari customer</h4>
+    <ul>
+      <li>Buka storefront: <span class="url">https://acrestehsolo.github.io/warung-kopi-jus-online/</span></li>
+      <li>Pilih menu → checkout → bayar → order berhasil</li>
+      <li>Order otomatis masuk ke Gist</li>
+    </ul>
+    <h4 style="color:var(--teal-dark);margin:12px 0 6px">2. Test admin menerima order</h4>
+    <ul>
+      <li>Buka admin: <span class="url">https://acrestehsolo.github.io/warung-kopi-jus-online/admin.html</span></li>
+      <li>Login: <code>666666</code></li>
+      <li><strong>Order harus muncul!</strong> (auto-refresh 5 detik)</li>
+    </ul>
+    <div class="success-box"><strong>🎉 BERHASIL!</strong> Sekarang order customer langsung muncul di admin.</div>
+  </div>
+
+  <div class="footer">
+    <p><strong>☕ Warung Kopi Mas Wahyu</strong> — Database: GitHub Gist</p>
+    <p>Powered by Bolang · Cara paling mudah tanpa server</p>
+  </div>
+</div>
+</body>
+</html>

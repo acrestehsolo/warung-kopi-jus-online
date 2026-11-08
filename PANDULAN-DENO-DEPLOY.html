@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panduan Deploy Deno Deploy — Warung Kopi Mas Wahyu</title>
+<style>
+  :root {
+    --teal: #0d9488;
+    --teal-dark: #0f766e;
+    --teal-light: #14b8a6;
+    --green: #16a34a;
+    --green-light: #dcfce7;
+    --bg: #f0fdfa;
+    --card: #ffffff;
+    --border: #ccfbf1;
+    --orange: #ea580c;
+    --orange-light: #ffedd5;
+    --blue: #2563eb;
+    --blue-light: #dbeafe;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --gray: #6b7280;
+    --gray-light: #f3f4f6;
+    --text: #1f2937;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, var(--bg) 0%, #ecfdf5 100%);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 20px;
+  }
+  .wrap { max-width: 800px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    text-align: center;
+    background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+    color: white;
+    padding: 30px 20px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 20px rgba(13,148,136,0.3);
+  }
+  .header h1 { font-size: 28px; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; }
+
+  /* Progress */
+  .progress {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+  .progress-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--gray);
+  }
+
+  /* Step card */
+  .step {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .step-num {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--teal);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+  .step-title { font-size: 18px; font-weight: 700; color: var(--teal-dark); }
+
+  /* Click callout */
+  .click-box {
+    background: var(--blue-light);
+    border-left: 4px solid var(--blue);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .click-box strong { color: var(--blue); }
+
+  /* Type box */
+  .type-box {
+    background: var(--orange-light);
+    border-left: 4px solid var(--orange);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .type-box strong { color: var(--orange); }
+
+  /* Important box */
+  .important-box {
+    background: var(--red-light);
+    border-left: 4px solid var(--red);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .important-box strong { color: var(--red); }
+
+  /* Success box */
+  .success-box {
+    background: var(--green-light);
+    border-left: 4px solid var(--green);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .success-box strong { color: var(--green); }
+
+  /* Code block */
+  pre {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: "SF Mono", Monaco, Consolas, monospace;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.6;
+  }
+  pre .comment { color: #64748b; }
+  pre .string { color: #fbbf24; }
+  pre .keyword { color: #c084fc; }
+
+  /* Flow diagram */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+  .flow-node {
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .flow-node.github { background: #1e293b; color: white; }
+  .flow-node.deno { background: var(--teal); color: white; }
+  .flow-node.kv { background: var(--orange); color: white; }
+  .flow-node.storefront { background: var(--green); color: white; }
+  .flow-node.admin { background: var(--blue); color: white; }
+  .flow-arrow { color: var(--gray); font-size: 20px; }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+  th { background: var(--bg); color: var(--teal-dark); font-weight: 600; }
+
+  /* URL highlight */
+  .url {
+    background: var(--green-light);
+    color: var(--green);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-weight: 600;
+  }
+
+  /* Icon */
+  .icon { font-size: 24px; }
+
+  ul { padding-left: 20px; margin: 10px 0; }
+  li { margin: 6px 0; }
+
+  .divider {
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 30px 0;
+  }
+
+  .footer {
+    text-align: center;
+    color: var(--gray);
+    font-size: 13px;
+    margin-top: 30px;
+    padding: 20px;
+  }
+  .footer strong { color: var(--teal-dark); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="icon">☕🍹</div>
+    <h1>Panduan Deploy Deno Deploy</h1>
+    <p>Warung Kopi Mas Wahyu — Bikin order customer langsung muncul di admin</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress">
+    <div class="progress-dot">1</div>
+    <div class="progress-dot">2</div>
+    <div class="progress-dot">3</div>
+    <div class="progress-dot">4</div>
+    <div class="progress-dot">5</div>
+    <div class="progress-dot">6</div>
+    <div class="progress-dot">7</div>
+  </div>
+
+  <!-- FLOW OVERVIEW -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">📋</div>
+      <div class="step-title">Gambaran Alur</div>
+    </div>
+    <p>Sebelum mulai, ini yang akan kita capai:</p>
+    <div class="flow">
+      <div class="flow-node storefront">Customer<br><small>buka index.html</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node deno">Deno Deploy<br><small>backend API</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node kv">Deno KV<br><small>simpan order</small></div>
+      <div class="flow-arrow">←</div>
+      <div class="flow-node admin">Admin<br><small>buka admin.html</small></div>
+    </div>
+    <div class="important-box">
+      <strong>⚠️ Platform baru:</strong> Deno Deploy Classic (<strong>dash.deno.com</strong>) sudah dimatikan 20 Juli 2026. Kita pakai platform baru di <strong>console.deno.com</strong>.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- STEP 1 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div class="step-title">Upload file ke GitHub</div>
+    </div>
+    <p>File-file ini sudah ada di zip. Upload ke repo GitHub kamu (acrestehsolo/warung-kopi-jus-online):</p>
+    <ul>
+      <li><code>api/deno.ts</code> — backend API</li>
+      <li><code>deno.json</code> — config Deno Deploy</li>
+      <li><code>js/store.js</code> — yang sudah diupdate (ada SERVER_URL)</li>
+      <li><code>README.md</code> — panduan (optional)</li>
+    </ul>
+    <div class="click-box">
+      <strong>Cara upload:</strong> GitHub → repo → <strong>Add file → Upload files</strong> → drag file-file di atas → <strong>Commit changes</strong>
+    </div>
+    <div class="success-box">
+      <strong>✅ Setelah ini:</strong> file-file ada di GitHub, siap di-deploy ke Deno.
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div class="step-title">Buka console.deno.com & Sign In</div>
+    </div>
+    <div class="click-box">
+      <strong>Klik:</strong> buka browser → ketik <span class="url">https://console.deno.com</span> → <strong>Sign in</strong> dengan GitHub kamu.
+    </div>
+    <p>Kalau belum punya akun, bisa sign in dengan GitHub (gratis).</p>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div class="step-title">Create Organization</div>
+    </div>
+    <div class="click-box">
+      <strong>Klik:</strong> tombol <strong>Create Organization</strong> (atau "+ New Organization")
+    </div>
+    <div class="type-box">
+      <strong>Isi:</strong> Nama organisasi — bisa pakai nama kamu, contoh: <code>acrestehsolo</code> atau <code>warung-wahyu</code>
+    </div>
+    <div class="important-box">
+      <strong>⚠️ Catatan:</strong> Nama organisasi AKAN jadi bagian dari URL deploy kamu. Pilih nama yang simpel. Nama tidak bisa diganti setelah dibuat.
+    </div>
+    <div class="success-box">
+      <strong>✅ Setelah ini:</strong> kamu masuk ke halaman organisasi. Akan ada tombol <strong>+ New App</strong>.
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <div class="step-title">Create App & Pilih Repo</div>
+    </div>
+    <div class="click-box">
+      <strong>Klik:</strong> tombol <strong>+ New App</strong>
+    </div>
+    <p>Kamu akan diminta pilih GitHub repository:</p>
+    <div class="click-box">
+      <strong>Pilih:</strong> <code>acrestehsolo/warung-kopi-jus-online</code> (repo kamu)
+    </div>
+    <div class="important-box">
+      <strong>⚠️ Catatan:</strong> Jika repo tidak muncul, klik <strong>"Add another GitHub account"</strong> atau <strong>"Configure GitHub App permissions"</strong> untuk memberi akses ke repo kamu.
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <div class="step-title">Edit Build Config</div>
+    </div>
+    <p>Ini bagian PENTING — configure backend API kamu:</p>
+    <div class="click-box">
+      <strong>Klik:</strong> tombol <strong>"Edit build config"</strong>
+    </div>
+    <p>Isi form seperti ini:</p>
+    <table>
+      <tr><th>Field</th><th>Isi Dengan</th></tr>
+      <tr><td><strong>Framework preset</strong></td><td><code>No Preset</code></td></tr>
+      <tr><td><strong>Install command</strong></td><td><code>deno install</code></td></tr>
+      <tr><td><strong>Build command</strong></td><td><strong>Kosong</strong> (tidak perlu build)</td></tr>
+      <tr><td><strong>Runtime configuration</strong></td><td><code>Dynamic</code></td></tr>
+      <tr><td><strong>Dynamic Entrypoint</strong></td><td><code>api/deno.ts</code></td></tr>
+      <tr><td><strong>Region</strong></td><td><code>global</code> (US + Europe)</td></tr>
+    </table>
+    <div class="important-box">
+      <strong>⚠️ Jangan salah:</strong> Entrypoint harus <code>api/deno.ts</code> (bukan <code>main.ts</code> atau <code>server.js</code>). Ini file yang jalan di Deno Deploy.
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">6</div>
+      <div class="step-title">Create App & Deploy</div>
+    </div>
+    <div class="click-box">
+      <strong>Klik:</strong> tombol <strong>"Create App"</strong>
+    </div>
+    <p>Deno Deploy akan mulai build. Tunggu beberapa detik sampai status jadi <strong>"Deployed"</strong>.</p>
+    <div class="type-box">
+      <strong>URL Deploy kamu</strong> akan seperti ini:<br>
+      <span class="url">https://warung-kopi-jus-online.{nama-organisasimu}.deno.dev</span>
+    </div>
+    <div class="click-box">
+      <strong>Salin URL ini</strong> — nanti dipakai di Step 9.
+    </div>
+    <div class="important-box">
+      <strong>⚠️ Masih belum selesai!</strong> KV database belum di-assign. Tanpa KV, order tidak bisa disimpan. Lanjut ke Step 7.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- STEP 7 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">7</div>
+      <div class="step-title">Provision KV Database</div>
+    </div>
+    <p>KV adalah penyimpanan order. Di platform baru, ini harus di-provision terpisah.</p>
+    <div class="click-box">
+      <strong>Klik:</strong> menu <strong>"Databases"</strong> di navigation bar (kiri)
+    </div>
+    <div class="click-box">
+      <strong>Klik:</strong> tombol <strong>"Provision Database"</strong>
+    </div>
+    <div class="type-box">
+      <strong>Isi:</strong> 
+      <ul>
+        <li><strong>Database engine:</strong> <code>Deno KV</code></li>
+        <li><strong>Name:</strong> <code>warung-orders</code> (atau nama bebas)</li>
+      </ul>
+    </div>
+    <div class="click-box">
+      <strong>Klik:</strong> <strong>Save</strong> / <strong>Provision</strong>
+    </div>
+    <div class="success-box">
+      <strong>✅ KV database dibuat.</strong> Sekarang assign ke app kamu.
+    </div>
+  </div>
+
+  <!-- STEP 8 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">8</div>
+      <div class="step-title">Assign KV ke App</div>
+    </div>
+    <p>Beri tahu Deno Deploy: "App ini pakai KV database ini".</p>
+    <div class="click-box">
+      <strong>Klik:</strong> tombol <strong>"Assign"</strong> di samping KV database yang baru dibuat
+    </div>
+    <div class="type-box">
+      <strong>Pilih:</strong> app kamu (<code>warung-kopi-jus-online</code>) dari dropdown
+    </div>
+    <div class="click-box">
+      <strong>Klik:</strong> <strong>Assign</strong> / <strong>Confirm</strong>
+    </div>
+    <div class="success-box">
+      <strong>✅ Status berubah jadi "Connected"</strong> — app kamu sekarang terhubung ke KV. Order bisa disimpan!
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- STEP 9 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">9</div>
+      <div class="step-title">Pasang URL ke store.js</div>
+    </div>
+    <p>Beritahu aplikasi web kamu URL backend Deno Deploy. Edit file <code>js/store.js</code> di GitHub:</p>
+    <div class="click-box">
+      <strong>Cara:</strong> GitHub → repo → klik <code>js/store.js</code> → klik icon pensil (edit)
+    </div>
+    <p>Cari baris ini (dekat awal file):</p>
+    <pre><span class="comment">// >>> GANTI DENGAN URL BACKEND Deno Deploy <<</span>
+<span class="keyword">const</span> SERVER_URL = <span class="string">"YOUR-DENO-URL"</span>;</pre>
+    <p>Ganti menjadi (ganti dengan URL kamu dari Step 6):</p>
+    <pre><span class="keyword">const</span> SERVER_URL = <span class="string">"https://warung-kopi-jus-online.{nama-organisasi}.deno.dev"</span>;</pre>
+    <div class="important-box">
+      <strong>⚠️ Tempel URL dengan benar</strong> — tanpa tanda kutip tambahan. Tepat seperti yang muncul di Step 6.
+    </div>
+    <div class="click-box">
+      <strong>Klik:</strong> <strong>Commit changes</strong> → <strong>Push</strong> ke main branch
+    </div>
+    <div class="success-box">
+      <strong>✅ store.js diupdate.</strong> Deno Deploy otomatis redeploy (karena connected ke GitHub).
+    </div>
+  </div>
+
+  <!-- STEP 10 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">10</div>
+      <div class="step-title">Verifikasi — Test Order</div>
+    </div>
+    <p>Sekarang test apakah semuanya jalan:</p>
+
+    <h4 style="color: var(--teal-dark); margin: 16px 0 8px;">1. Test backend</h4>
+    <div class="click-box">
+      <strong>Buka:</strong> <span class="url">https://{URL-DENO}/api/health</span>
+    </div>
+    <div class="type-box">
+      <strong>Harus muncul:</strong> <code>{"ok":true,"mode":"server"}</code>
+    </div>
+
+    <h4 style="color: var(--teal-dark); margin: 16px 0 8px;">2. Test order dari customer</h4>
+    <ul>
+      <li>Buka storefront: <span class="url">https://acrestehsolo.github.io/warung-kopi-jus-online/</span></li>
+      <li>Pilih menu → checkout → pilih kurir + payment → klik "Oke"</li>
+      <li>Order disimpan ke Deno Deploy (KV)</li>
+    </ul>
+
+    <h4 style="color: var(--teal-dark); margin: 16px 0 8px;">3. Test admin menerima order</h4>
+    <ul>
+      <li>Buka admin: <span class="url">https://acrestehsolo.github.io/warung-kopi-jus-online/admin.html</span></li>
+      <li>Login: <code>666666</code></li>
+      <li><strong>Order harus langsung muncul!</strong> (auto-refresh 5 detik)</li>
+    </ul>
+
+    <div class="success-box">
+      <strong>🎉 BERHASIL!</strong> Order dari customer sekarang langsung muncul di admin, dari mana saja.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FAQ -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">?</div>
+      <div class="step-title">Pertanyaan Sering (FAQ)</div>
+    </div>
+
+    <h4 style="color: var(--teal-dark); margin: 12px 0 6px;">Q: Kalau admin offline (tidak ada internet)?</h4>
+    <p>Admin <strong>tidak bisa menerima order baru</strong>. Order yang sudah masuk sebelum offline tetap bisa dilihat. Order butuh internet untuk berjalan: customer → Deno Deploy → admin.</p>
+
+    <h4 style="color: var(--teal-dark); margin: 12px 0 6px;">Q: Apa bedanya Deno Deploy dengan GitHub Pages?</h4>
+    <table>
+      <tr><th></th><th>GitHub Pages</th><th>Deno Deploy</th></tr>
+      <tr><td>Jinis</td><td>Statik (HTML/CSS/JS)</td><td>Dinamis (backend jalan)</td></tr>
+      <tr><td>Server jalan?</td><td>❌</td><td>✅</td></tr>
+      <tr><td>Bisa terima order?</td><td>❌ (hanya localStorage)</td><td>✅ (ke KV cloud)</td></tr>
+      <tr><td>Admin bisa lihat order?</td><td>❌ (browser berbeda)</td><td>✅ (dari cloud)</td></tr>
+    </table>
+
+    <h4 style="color: var(--teal-dark); margin: 12px 0 6px;">Q: Biaya?</h4>
+    <p><strong>Gratis.</strong> 1 juta request/bulan, 1 GB KV storage. Cukup untuk warung kecil.</p>
+
+    <h4 style="color: var(--teal-dark); margin: 12px 0 6px;">Q: Laptop harus menyala?</h4>
+    <p><strong>Tidak.</strong> Server jalan di cloud Deno. Laptop bisa mati. Order tetap masuk.</p>
+
+    <h4 style="color: var(--teal-dark); margin: 12px 0 6px;">Q: Kalau mau ganti URL Deno Deploy?</h4>
+    <p>Edit <code>SERVER_URL</code> di <code>js/store.js</code> → push ke GitHub. Selesai.</p>
+  </div>
+
+  <div class="footer">
+    <p><strong>☕ Warung Kopi Mas Wahyu</strong> — Backend: Deno Deploy + Deno KV</p>
+    <p>Powered by Bolang · Panduan visual dibuat untuk non-teknis</p>
+  </div>
+
+</div>
+</body>
+</html>

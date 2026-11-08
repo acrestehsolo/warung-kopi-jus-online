@@ -1,0 +1,25 @@
+{
+  "name": "warung-kopi-jus-online",
+  "version": "1.0.0",
+  "description": "Warung kopi, jus & jus detok online dengan keranjang, pengantaran multi-kurir, dan panel admin",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "warung",
+    "kopi",
+    "jus",
+    "detok",
+    "online",
+    "shop",
+    "admin"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.22.3",
+    "jsdom": "^29.1.1",
+    "puppeteer": "^24.43.1"
+  }
+}

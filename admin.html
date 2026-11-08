@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — <span id="adminTitle"></span></title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>" />
+  <style>
+    /* ===== Admin-specific styles ===== */
+    body { background: #f3f0ec; }
+    .admin-header {
+      background: linear-gradient(135deg, #0d9488, #0f766e);
+      color: #fff; padding: 18px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px;
+    }
+    .admin-header h1 { font-size: 22px; display: flex; align-items: center; gap: 10px; }
+    .admin-header .actions { display: flex; gap: 8px; }
+    .admin-header a, .admin-header button {
+      background: rgba(255,255,255,0.12); color: #fff; border: none;
+      border-radius: 8px; padding: 8px 14px; font-size: 13px;
+      cursor: pointer; text-decoration: none; transition: background 0.2s;
+    }
+    .admin-header a:hover, .admin-header button:hover { background: rgba(255,255,255,0.25); }
+    .admin-body { max-width: 1100px; margin: 24px auto; padding: 0 20px; }
+
+    .login-card {
+      background: #fff; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      max-width: 380px; margin: 60px auto; padding: 30px; text-align: center;
+    }
+    .login-card h2 { color: #1f2937; margin-bottom: 8px; }
+    .login-card p { color: #6b7280; font-size: 14px; margin-bottom: 20px; }
+    .login-card input {
+      width: 100%; border: 2px solid #e5e7eb; border-radius: 8px;
+      padding: 12px; font-size: 14px; margin-bottom: 14px;
+    }
+    .login-card .btn-submit { margin-top: 4px; }
+    .login-error { color: #dc2626; font-size: 13px; margin-top: 8px; min-height: 18px; }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab {
+      background: #fff; border: 2px solid #e5e7eb; border-radius: 10px;
+      padding: 10px 18px; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .tab:hover { border-color: #6f4e37; }
+    .tab.active { background: #6f4e37; border-color: #6f4e37; color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 24px; }
+    .stat-card { background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .stat-card .label { font-size: 12px; color: #6b7280; font-weight: 600; text-transform: uppercase; }
+    .stat-card .value { font-size: 28px; font-weight: 800; color: #1f2937; margin-top: 4px; }
+
+    .panel {
+      background: #fff; border-radius: 12px; padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 20px;
+    }
+    .panel h3 { font-size: 17px; margin-bottom: 14px; color: #1f2937; }
+    .panel h4 { font-size: 15px; margin: 18px 0 8px; color: #4b5563; }
+
+    .orders-list { display: flex; flex-direction: column; gap: 12px; }
+    .order-card {
+      border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px;
+      background: #fafafa;
+    }
+    .order-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; }
+    .order-id { font-weight: 700; font-size: 14px; }
+    .order-time { font-size: 12px; color: #6b7280; }
+    .order-customer { font-size: 14px; margin: 6px 0; }
+    .order-customer strong { color: #1f2937; }
+    .order-items { font-size: 13px; color: #4b5563; margin: 8px 0; }
+    .order-total { font-size: 15px; font-weight: 700; color: #1f2937; }
+    .order-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+
+    .status-badge {
+      display: inline-block; padding: 3px 10px; border-radius: 50px;
+      font-size: 12px; font-weight: 700; color: #fff;
+    }
+    .status-actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+    .status-btn {
+      border: 1px solid #e5e7eb; background: #fff; border-radius: 6px;
+      padding: 5px 12px; font-size: 12px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .status-btn:hover { border-color: #6f4e37; color: #6f4e37; }
+    .status-btn.next { background: #16a34a; color: #fff; border-color: #16a34a; }
+    .status-btn.next:hover { background: #15803d; }
+    .status-btn.cancel { background: #dc2626; color: #fff; border-color: #dc2626; }
+    .status-btn.cancel:hover { background: #b91c1c; }
+
+    .settings-form input, .settings-form textarea, .settings-form select {
+      width: 100%; border: 2px solid #e5e7eb; border-radius: 8px;
+      padding: 10px 12px; font-size: 14px; font-family: inherit; margin-bottom: 12px;
+      background: #fff;
+    }
+    .settings-form input:focus, .settings-form textarea:focus { outline: none; border-color: #6f4e37; }
+    .field-label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; margin-top: 12px; }
+    .courier-fee-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .courier-fee-item { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px; }
+    .courier-fee-item .title { font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+    .courier-fee-item input { width: 100%; border: 1px solid #e5e7eb; border-radius: 6px; padding: 6px 8px; font-size: 13px; margin-bottom: 4px; }
+
+    .menu-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .menu-table th, .menu-table td { padding: 10px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+    .menu-table th { background: #f9fafb; font-size: 13px; color: #4b5563; }
+    .menu-table .emoji { font-size: 22px; }
+    .menu-table .price { font-weight: 700; color: #6f4e37; }
+    .menu-table .actions { white-space: nowrap; }
+    .btn-mini {
+      border: 1px solid #e5e7eb; background: #fff; border-radius: 6px;
+      padding: 4px 10px; font-size: 12px; font-weight: 600; cursor: pointer;
+      margin-right: 4px;
+    }
+    .btn-mini:hover { border-color: #6f4e37; color: #6f4e37; }
+    .btn-mini.danger { color: #dc2626; border-color: #fecaca; }
+    .btn-mini.danger:hover { background: #fef2f2; }
+
+    .empty-orders { text-align: center; color: #6b7280; padding: 30px 0; font-size: 15px; }
+    .toast {
+      position: fixed; bottom: 20px; right: 20px;
+      background: #1f2937; color: #fff; border-radius: 10px;
+      padding: 12px 20px; font-size: 14px; z-index: 200;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      animation: pop 0.2s ease;
+    }
+    @media (max-width: 600px) {
+      .admin-header h1 { font-size: 16px; flex-wrap: wrap; }
+      .admin-header .actions { flex-wrap: wrap; gap: 4px; }
+      .admin-header a, .admin-header button { padding: 6px 10px; font-size: 12px; }
+      .admin-body { max-width: 100%; margin: 12px auto; padding: 0 10px; }
+      .login-card { padding: 20px; }
+      .tabs { overflow-x: auto; flex-wrap: nowrap; margin-bottom: 12px; }
+      .tab { padding: 8px 10px; font-size: 12px; white-space: nowrap; }
+      .panel { padding: 12px; border-radius: 10px; }
+      .panel h3 { font-size: 14px; }
+      .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .stat-card { padding: 10px; }
+      .stat-value { font-size: 18px; }
+      .stat-label { font-size: 11px; }
+      .orders-list { max-height: none; }
+      .order-card { padding: 10px; border-radius: 8px; }
+      .order-id { font-size: 13px; }
+      .order-time { font-size: 11px; }
+      .order-customer { font-size: 12px; }
+      .order-items { font-size: 12px; }
+      .order-total { font-size: 12px; }
+      .order-actions { flex-wrap: wrap; }
+      .btn-mini { padding: 4px 8px; font-size: 11px; }
+      .status-btn { padding: 5px 8px; font-size: 11px; }
+      .menu-table { font-size: 11px; }
+      .menu-table th, .menu-table td { padding: 6px 4px; }
+      .menu-table img { width: 28px; height: 28px; }
+      .settings-form { padding: 12px; }
+      .field-row { flex-direction: column; gap: 4px; }
+      .courier-fee-grid { grid-template-columns: 1fr; }
+      .courier-fee-item { padding: 8px; }
+      .modal-content { width: 100%; margin: 10px; max-width: 100%; }
+      .modal-head h3 { font-size: 15px; }
+      .receipt-paper { padding: 12px; font-size: 12px; }
+    }
+
+    @media (max-width: 900px) and (min-width: 601px) {
+      .stat-grid { grid-template-columns: 1fr 1fr; }
+      .menu-table { font-size: 13px; }
+      .order-card { padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="admin-header">
+    <h1>☕🍹 Admin — <span id="adminShopName"></span></h1>
+    <div class="actions">
+      <a href="index.html">← Ke Toko</a>
+      <button id="refreshOrdersBtn" title="Refresh pesanan">🔄</button>
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </header>
+
+  <div class="admin-body">
+    <!-- ===== Login ===== -->
+    <div id="loginView">
+      <div class="login-card">
+        <h2>🔐 Login Admin</h2>
+        <p>Masukkan kata sandi untuk masuk ke panel admin.</p>
+        <input type="password" id="loginPassword" placeholder="Kata sandi admin" autocomplete="current-password" />
+        <button class="btn-submit" id="loginBtn">Masuk</button>
+        <div class="login-error" id="loginError"></div>
+      </div>
+    </div>
+
+    <!-- ===== Admin panels ===== -->
+    <div id="adminView" hidden>
+      <div class="tabs">
+        <div class="tab active" data-tab="dashboard">📊 Dashboard</div>
+        <div class="tab" data-tab="orders">📦 Pesanan</div>
+        <div class="tab" data-tab="menu">🍽️ Menu</div>
+        <div class="tab" data-tab="settings">⚙️ Pengaturan</div>
+      </div>
+
+      <!-- Dashboard -->
+      <div class="tab-panel active" id="panel-dashboard">
+        <div class="stat-grid" id="statGrid"></div>
+        <div class="panel">
+          <h3>📋 Pesanan Terbaru</h3>
+          <div id="recentOrders" class="orders-list"></div>
+        </div>
+      </div>
+
+      <!-- Orders -->
+      <div class="tab-panel" id="panel-orders">
+        <div class="panel">
+          <h3>📦 Semua Pesanan</h3>
+          <div id="allOrders" class="orders-list"></div>
+        </div>
+      </div>
+
+      <!-- Menu -->
+      <div class="tab-panel" id="panel-menu">
+        <div class="panel">
+          <h3>🍽️ Kelola Menu</h3>
+          <p style="margin-bottom:14px;color:#6b7280;font-size:13px;">Tambah, edit, atau hapus item menu.</p>
+          <div class="settings-form">
+            <input type="text" id="newItemName" placeholder="Nama item" />
+            <input type="text" id="newItemDesc" placeholder="Deskripsi (opsional)" />
+            <select id="newItemCategory">
+              <option value="kopi">☕ Kopi</option>
+              <option value="jus">🍹 Jus Segar</option>
+              <option value="detoks">🌿 Jus Detoks</option>
+              <option value="camilan">🍪 Camilan</option>
+            </select>
+            <input type="number" id="newItemPrice" placeholder="Harga (Rp)" min="0" step="100" />
+            <input type="text" id="newItemEmoji" placeholder="Emoji (mis: ☕)" maxlength="4" style="width:80px;" />
+            <button class="btn-submit" id="addItemBtn" style="margin-top:4px;">+ Tambah Item</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>📋 Daftar Menu</h3>
+          <table class="menu-table">
+            <thead>
+              <tr><th>Gambar</th><th>Nama</th><th>Kategori</th><th>Harga</th><th>Deskripsi</th><th>Aksi</th></tr>
+            </thead>
+            <tbody id="menuTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="tab-panel" id="panel-settings">
+        <div class="panel">
+          <h3>⚙️ Pengaturan Warung</h3>
+          <div class="settings-form">
+            <label class="field-label">Nama Warung / Toko</label>
+            <input type="text" id="setShopName" />
+            <label class="field-label">No. HP Kontak</label>
+            <input type="text" id="setPhone" />
+            <label class="field-label">🟢 No. WA Kasir (untuk konfirmasi bayar)</label>
+            <input type="text" id="setShopWa" placeholder="0812-3456-7890" />
+            <label class="field-label">Alamat Warung</label>
+            <input type="text" id="setAddress" />
+            <label class="field-label">Ucapan Terima Kasih kepada Pembeli</label>
+            <textarea id="setThanks" rows="3"></textarea>
+            <label class="field-label">Kata Sandi Admin</label>
+            <input type="password" id="setAdminPass" />
+            <label class="field-label">Jarak Maksimal Pengantaran (km)</label>
+            <input type="number" id="setMaxKm" min="1" max="25" />
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>🖼️ Logo Toko</h3>
+          <p style="margin-bottom:14px;color:#6b7280;font-size:13px;">Upload logo warung (JPG/PNG). Ukuran otomatis diperkecil.</p>
+          <div class="settings-form">
+            <label class="field-label">Upload Logo</label>
+            <input type="file" id="setLogoFile" accept="image/jpeg,image/png" />
+            <div id="logoPreview" class="image-preview" style="margin-top:8px;"></div>
+            <input type="hidden" id="setLogo" />
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>📱 Gambar QRIS</h3>
+          <p style="margin-bottom:14px;color:#6b7280;font-size:13px;">Upload kode QRIS (JPG/PNG) untuk pembayaran scan.</p>
+          <div class="settings-form">
+            <label class="field-label">Upload QRIS</label>
+            <input type="file" id="setQrisFile" accept="image/jpeg,image/png" />
+            <div id="qrisPreview" class="image-preview" style="margin-top:8px;"></div>
+            <input type="hidden" id="setQris" />
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>🏦 Informasi Pembayaran</h3>
+          <p style="margin-bottom:14px;color:#6b7280;font-size:13px;">Atur rekening bank dan nomor e-wallet untuk pembayaran.</p>
+          <div class="settings-form">
+            <label class="field-label">Nama Bank</label>
+            <input type="text" id="setBankName" placeholder="Contoh: BCA, Mandiri, BRI" />
+            <label class="field-label">Nomor Rekening</label>
+            <input type="text" id="setBankAccount" placeholder="Contoh: 1234567890" />
+            <label class="field-label">Nama Pemilik Rekening</label>
+            <input type="text" id="setShopAccountName" placeholder="Contoh: JOKO SUDIRMAN" />
+            <label class="field-label">Nomor GoPay / E-Wallet</label>
+            <input type="text" id="setGopayAccount" placeholder="Contoh: 081234567890" />
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>🚚 Tarif Ongkir per Kurir</h3>
+          <p style="margin-bottom:12px;color:#6b7280;font-size:13px;">Atur biaya pengantaran untuk jarak 0–5 km dan 5–10 km.</p>
+          <div class="courier-fee-grid" id="courierFeeGrid"></div>
+        </div>
+
+        <div class="panel">
+          <h3>🗺️ Lokasi Resto (Google Maps)</h3>
+          <p style="margin-bottom:12px;color:#6b7280;font-size:13px;">Atur titik presisi resto di Google Maps. Klik tombol "Buka Google Maps" untuk memilih lokasi.</p>
+          <div class="settings-form">
+            <label class="field-label">Alamat</label>
+            <input type="text" id="setAddress" />
+            <label class="field-label">Latitude</label>
+            <input type="text" id="setLat" placeholder="Contoh: -7.4217" />
+            <label class="field-label">Longitude</label>
+            <input type="text" id="setLng" placeholder="Contoh: 110.7456" />
+            <button type="button" class="btn-mini" id="openMapsBtn" style="margin-bottom:12px;">📍 Buka Google Maps untuk pilih lokasi</button>
+            <div id="mapsPreview" style="margin-top:8px;"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>🔗 API & Deep Link Kurir</h3>
+          <p style="margin-bottom:12px;color:#6b7280;font-size:13px;">Isi URL merchant setiap kurir. Jika diisi, tombol "Pesan via [Kurir]" akan muncul di checkout. Bisa juga isi API Key untuk integrasi otomatis.</p>
+          <div class="courier-fee-grid" id="courierApiGrid"></div>
+        </div>
+
+        <div style="display:flex;gap:10px;">
+          <button class="btn-submit" id="saveSettingsBtn">💾 Simpan Semua Pengaturan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <!-- ===== Modal Cetak Struk (Thermal Printer) ===== -->
+  <div class="modal" id="receiptModal" hidden>
+    <div class="modal-content receipt-modal-content">
+      <div class="modal-head">
+        <h3>🖨️ Cetak Struk Pesanan</h3>
+        <button class="close-btn" id="closeReceipt" aria-label="Tutup">✕</button>
+      </div>
+      <div class="receipt-actions" style="padding:14px 20px;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid #e5e7eb;">
+        <button class="btn-mini" id="printReceiptBtn">🖨️ Cetak (Browser)</button>
+        <button class="btn-mini" id="downloadReceiptBtn">📄 Download HTML</button>
+      </div>
+      <div class="receipt-paper" id="receiptPaper"></div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
