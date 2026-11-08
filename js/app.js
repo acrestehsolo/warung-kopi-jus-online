@@ -46,9 +46,30 @@ function showToast(msg) {
 
 /* ---------- Muat data ---------- */
 async function init() {
-  await Store.init();
-  state.settings = await Store.get("settings", DEFAULT_SETTINGS);
-  state.menu = await Store.get("menu", DEFAULT_MENU);
+  try {
+    await Store.init();
+  } catch {
+    // Jika Store.init gagal, tetap jalan di local mode
+  }
+  try {
+    state.settings = await Store.get("settings", DEFAULT_SETTINGS);
+  } catch {
+    state.settings = DEFAULT_SETTINGS;
+  }
+  try {
+    state.menu = await Store.get("menu", DEFAULT_MENU);
+  } catch {
+    state.menu = DEFAULT_MENU;
+  }
+
+  // Fallback: jika menu kosong atau tidak valid, pakai DEFAULT_MENU
+  if (!state.menu || !Array.isArray(state.menu) || state.menu.length === 0) {
+    state.menu = DEFAULT_MENU;
+  }
+  // Fallback: jika settings tidak valid, pakai DEFAULT_SETTINGS
+  if (!state.settings || !state.settings.shopName) {
+    state.settings = DEFAULT_SETTINGS;
+  }
 
   renderHeader();
   renderCategories();
