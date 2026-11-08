@@ -195,8 +195,8 @@ function buildReceiptHtml(order) {
   const date = new Date(order.createdAt);
   const dateStr = date.toLocaleString("id-ID", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
   const items = order.items.map((i) =>
-    `${i.emoji} ${escapeHtml(i.name)}\n    ${money(i.price)} × ${i.qty}    = ${money(i.price * i.qty)}`
-  ).join("\n");
+    `<div class="receipt-line"><span>${i.emoji} ${escapeHtml(i.name)}</span><span>${money(i.price * i.qty)}</span></div>`
+  ).join("");
 
   return `
 <h4>${escapeHtml(state.settings.shopName)}</h4>
@@ -222,25 +222,7 @@ ${items}
 <div class="receipt-line-no-border"><span>Pembayaran</span><span>${order.paymentName}</span></div>
 <div class="receipt-line-no-border"><span>Kurir</span><span>${order.courierEmoji} ${order.courierName}</span></div>
 <div class="receipt-line-no-border"><span>Jarak</span><span>${order.distanceKm} km</span></div>
-<div class="receipt-line-no-border"><span>Kurir</span><span>${order.courierEmoji} ${order.courierName}</span></div>
-<div class="receipt-line-no-border"><span>Jarak</span><span>${order.distanceKm} km</span></div>
-
-<div class="receipt-divider">---------------------------</div>
-
-<div class="receipt-line-no-border"><span>PEMBELIAN</span><span></span></div>
-${items}
-
-<div class="receipt-divider">---------------------------</div>
-
-<div class="receipt-line"><span>Subtotal</span><span>${money(order.subtotal)}</span></div>
-<div class="receipt-line"><span>Ongkir (${order.courierEmoji} ${order.courierName})</span><span>${money(order.shippingFee)}</span></div>
-<div class="receipt-line receipt-total"><span>TOTAL BAYAR</span><span>${money(order.total)}</span></div>
-
-<div class="receipt-divider">---------------------------</div>
-
-<div class="receipt-line-no-border"><span>Pembayaran</span><span>${order.paymentName}</span></div>
-<div class="receipt-line-no-border"><span>Kurir</span><span>${order.courierEmoji} ${order.courierName}</span></div>
-<div class="receipt-line-no-border"><span>Jarak</span><span>${order.distanceKm} km</span></div>
+${o.paymentRef ? `<div class="receipt-line-no-border"><span>Ref Bayar</span><span>${order.paymentRef}</span></div>` : ""}
 
 <div class="receipt-thanks">TERIMA KASIH ATAS KEPERCAYAANNYA!</div>
 <div class="receipt-barcode">* * * ${order.id} * * *</div>
